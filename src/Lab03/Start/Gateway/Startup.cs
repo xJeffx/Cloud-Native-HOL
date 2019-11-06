@@ -30,7 +30,12 @@ namespace Gateway
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
       services.AddSingleton<Services.IWorkInProgress>(new Services.WorkInProgress());
       // TODO: add SandwichmakerListenerHostedService service
+      services.AddSingleton<Services.ISandwichRequestor>((e) =>
+         new Services.SandwichRequestor(
+             e.GetService<IConfiguration>(),
+             e.GetService<Services.IWorkInProgress>()));
       // TODO: add SandwichRequestor service
+      services.AddHostedService<Services.SandwichmakerListener>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

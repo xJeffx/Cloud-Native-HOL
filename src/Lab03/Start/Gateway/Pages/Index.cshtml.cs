@@ -25,9 +25,28 @@ namespace Gateway.Pages
     {
     }
 
+    readonly Services.ISandwichRequestor _requestor;
+
+    public IndexModel(Services.ISandwichRequestor requestor)
+    {
+      _requestor = requestor;
+    }
+
     public async Task OnPost()
     {
-      // TODO: Implement code to request a sandwich
+      var request = new Messages.SandwichRequest
+      {
+        Meat = TheMeat,
+        Bread = TheBread,
+        Cheese = TheCheese,
+        Lettuce = TheLettuce
+      };
+      var result = await _requestor.RequestSandwich(request);
+
+      if (result.Success)
+        ReplyText = result.Description;
+      else
+        ReplyText = result.Error;
     }
   }
 }
